@@ -17,28 +17,43 @@ function Init() {
 
     callbackFunction[0].news;
 
-    /* var urlSport = "https://newsapi.org/v2/top-headlines?country=au&category=sports&apiKey=ac4c1819fc814b4da5f6a7d81ecc1596";
-     var urlEntertainment = "https://newsapi.org/v2/top-headlines?country=au&category=entertainment&apiKey=ac4c1819fc814b4da5f6a7d81ecc1596";
-     var urlScience = "https://newsapi.org/v2/top-headlines?country=au&category=science&apiKey=ac4c1819fc814b4da5f6a7d81ecc1596";
-     var urlBusiness = "https://newsapi.org/v2/top-headlines?country=au&category=business&apiKey=ac4c1819fc814b4da5f6a7d81ecc1596";
-     var urlTechnology = "https://newsapi.org/v2/top-headlines?country=au&category=technology&apiKey=ac4c1819fc814b4da5f6a7d81ecc1596";
     
-     Request(urlSport, sportNews);
-     Request(urlEntertainment, entertainmentNews);
-     Request(urlScience, scienceNews);
-     Request(urlBusiness, businessNews);
-     Request(urlTechnology, technologyNews);
- */
 
-    for (var i = 0; i < category.length; i++)
+    for (var i = 0; i < category.length; i++){
         //console.log(category[i]+"News");
         Request(category[i], apiKey, callbackFunction[i].news);
+    }
+  }
 
+var weatherAPIKey = "014b1f366aba2c21e286eb5a7c72764f";//api.openweathermap.org/data/2.5/forecast/daily?q=London&mode=xml&units=metric&cnt=7
+var city = "Rivne";
+WeatherRequest(city, weatherAPIKey, RenderWeather); //api.openweathermap.org/data/2.5/forecast/daily?id=524901
+
+function WeatherRequest(city, weatherAPIKey, callback) {
+  var url = `http://api.openweathermap.org/data/2.5/forecast?id=7046809&APPID=${weatherAPIKey}`;
+  //api.openweathermap.org/data/2.5/forecast?id=707860&APPID=eb1eee072bb055a6ebad977afce5902f
+  http: https: var xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+  xhr.send();
+
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState != 4) return;
+
+    if (xhr.status != 200) {
+      var errStatus = xhr.status;
+      var errText = xhr.statusText;
+      console.log(errStatus + ": " + errText);
+    } else {
+      var data = JSON.parse(xhr.responseText);
+      callback(data);
+    }
+  };
 }
+
 
 function Request(category, apiKey, callback) {
 
-    var url = `https://newsapi.org/v2/top-headlines?country=au&category=${category}&apiKey=${apiKey}`;
+    var url = `https://newsapi.org/v2/top-headlines?country=ua&category=${category}&apiKey=${apiKey}`;
 
     var xhr = new XMLHttpRequest();
 
@@ -61,6 +76,38 @@ function Request(category, apiKey, callback) {
     }
 }
 
+function RenderWeather(weather) {
+  console.log(weather);
+  var weatherElement = document.querySelector("#weather");
+  for (var i = 0; i < 40; i+=8) {
+    var weatherDiv = document.createElement("div");
+    weatherDiv.className = "weather";
+    var city = document.createElement("div");
+    city.className = "city";
+    city.innerHTML = `${weather.city.name}  ${weather.city.country}`;
+    var weatherBody = document.createElement("div");
+    weatherBody.className = "weatherList";
+    weatherBody.innerHTML = `${weather.list[i].dt_txt} ${
+      weather.list[i].weather[0].description
+    } `;
+
+var img = document.createElement("img");
+img.setAttribute("src", "https://openweathermap.org/img/w/" + weather.list[i].weather[0].icon +".png");
+    var weatherTemp = document.createElement("div");
+    weatherTemp.className = "weatherTemp";
+
+    weatherTemp.innerHTML = ` Temperature: ${weather.list[i].main.temp}`;
+
+    
+
+    weatherElement.appendChild(weatherDiv);
+    weatherDiv.appendChild(city);
+    weatherDiv.appendChild(weatherBody);
+    
+    weatherDiv.appendChild(img);
+    weatherDiv.appendChild(weatherTemp);
+  }
+}
 
 
 function sportNews(news) {
@@ -294,3 +341,4 @@ function buy_table(data) {
     var btc_sell = document.querySelector(".btc_sell");
     btc_sell.innerHTML = data[3].sale;
 }
+

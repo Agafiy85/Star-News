@@ -227,7 +227,7 @@ h3{
 }
 
 .news_img{
-    width: 400px;
+    width: 528px;
     height:300px;
 }
 
@@ -247,5 +247,26 @@ h3{
 }
 .table-dark{
     border-radius: 8px;
+    text-align: center;
+}
+.table-striped{
+    border-radius: 8px;
+    color:#EAE7DC;
+}
+.weather{
+    color:#EAE7DC;
+    
+}
+.blocks3{
+    height: 250px;
+    margin: 15px 0;
+    border: 1px solid #28a745;
+    border-radius: 10px;
+    padding: 0;
+    display: flex;
+}
+.city{
+    color: red;
+    font-weight: 700;
     text-align: center;
 }
